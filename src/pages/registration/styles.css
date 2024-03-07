@@ -90,3 +90,11 @@ Button:hover {
     width: 100%;
     justify-content: space-evenly;
 }
+
+.errorMessage {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 14px;
+    color: red;
+}
