@@ -8,14 +8,11 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
 
     function onChangeU(events) {
-        console.log(events.target.value);
         setUsername(events.target.value);
-        
     }
 
     function onChangeP(events) {
         setPassword(events.target.value);
-        console.log(password);
     }
 
     function onSubmit() {
