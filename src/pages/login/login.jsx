@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
 function Login() {
@@ -7,6 +8,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [usernameError, setUsernameError] = useState("");
+    const navigate = useNavigate();
 
     function onChangeU(event) {
         const value = event.target.value;
@@ -31,6 +33,10 @@ function Login() {
         setShowPassword(!showPassword);
     }
 
+    function navigateToRegistration() {
+        navigate('/registration');
+    }
+
     return (
         <div className='container'>
             <div className='innerContainer'>
@@ -42,7 +48,7 @@ function Login() {
                     <input className="showPassword" type="checkbox" onChange={togglePassword} /> Show Password
                 </label>
                 <div className='buttonContainer'>
-                    <button onClick={onSubmit}>Create Account</button>
+                    <button onClick={navigateToRegistration}>Register</button>
                     <button onClick={onSubmit}>Log In</button>
                 </div>
             </div>
