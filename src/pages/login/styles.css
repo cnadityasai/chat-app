@@ -3,17 +3,17 @@ body {
     font-family: "Poppins", sans-serif;
     font-weight: 700;
     font-style: normal;
-    beckground-color: rgb(94, 22, 219)
 }
 
 .container {
     display: flex;
-    background-color: rgb(94, 22, 219);
+    background-image: url('../bg.jpg');
+    background-size: contain;
     width: 100%;
     height: 100vh;
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 1s ease;
 }
 
 

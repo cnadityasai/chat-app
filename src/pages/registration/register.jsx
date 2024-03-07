@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import './styles.css';
 
 function Register() {
@@ -10,6 +11,7 @@ function Register() {
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const navigate = useNavigate();
 
     function onChangeU(event) {
         const value = event.target.value;
@@ -44,6 +46,10 @@ function Register() {
         setShowPassword(!showPassword);
     }
 
+    function navigateToLogin() {
+        navigate('/');
+    }
+
     return (
         <div className='container'>
             <div className='innerContainer'>
@@ -59,7 +65,7 @@ function Register() {
                 </label>
                 <div className='buttonContainer'>
                     <button onClick={onSubmit}>Create Account</button>
-                    <button onClick={onSubmit}>Log In</button>
+                    <button onClick={navigateToLogin}>Existing User</button>
                 </div>
             </div>
         </div>
