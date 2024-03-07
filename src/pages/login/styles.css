@@ -3,33 +3,77 @@ body {
     font-family: "Poppins", sans-serif;
     font-weight: 700;
     font-style: normal;
+    beckground-color: rgb(94, 22, 219)
 }
 
 .container {
     display: flex;
-    background-color: white;
+    background-color: rgb(94, 22, 219);
     width: 100%;
     height: 100vh;
     justify-content: center;
     align-items: center;
+    animation: fadeIn 0.5s ease;
 }
 
-.heading {
-
-}
 
 .innerContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: red;
-    width: 30%;
+    background-color: white;
+    width: 25%;
     height: 50%;
-    border-radius: 20px;
+    border-radius: 15px;
+    max-height: 50%;
+}
+
+.heading {
+    padding-top: 0px;
 }
 
 .inputField {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: italic;
     margin: 10px;
-    padding: 10px 40px;
+    padding: 10px 50px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    max-width: 50%;
+}
+
+
+.inputField:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button{
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    margin-top: 20px;
+    width: 50%;
+    background-color: rgb(142, 65, 163);
+    color: #080710;
+    padding: 15px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.showPassword {
+    margin-top: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
