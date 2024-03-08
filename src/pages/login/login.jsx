@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import './styles.css';
+import './login.css';
 
 function Login() {
 
@@ -23,7 +23,7 @@ function Login() {
     function onSubmit() {
         if (username && password) {
             console.log("Submitted");
-            // You can add your submission logic here
+            // add submission logic here
         } else {
             console.log("Please fill out all fields correctly");
         }

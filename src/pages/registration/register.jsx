@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import './styles.css';
+import './register.css';
 
 function Register() {
 
@@ -64,8 +64,8 @@ function Register() {
                     <input className="showPassword" type="checkbox" onChange={togglePasswordVisibility} /> Show Password
                 </label>
                 <div className='buttonContainer'>
-                    <button onClick={onSubmit}>Create Account</button>
-                    <button onClick={navigateToLogin}>Existing User</button>
+                    <button className="first" onClick={onSubmit}>Create Account</button>
+                    <button className="second" onClick={navigateToLogin}>Existing User</button>
                 </div>
             </div>
         </div>

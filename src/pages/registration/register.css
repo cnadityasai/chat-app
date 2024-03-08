@@ -24,10 +24,11 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-    width: 25%;
-    height: 50%;
+    width: auto;
+    height: auto;
     border-radius: 15px;
-    max-height: 70%;
+    max-height: 90%;
+    padding: 70px 70px;
 }
 
 .heading {
@@ -92,6 +93,14 @@ Button:hover {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
+}
+
+.first {
+    margin-right: 10px;
+}
+
+.second {
+    margin-left: 10px;
 }
 
 .errorMessage {
