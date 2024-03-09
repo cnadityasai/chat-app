@@ -51,9 +51,9 @@ function Register() {
     }
 
     return (
-        <div className='container'>
-            <div className='innerContainer'>
-                <h1 className='heading'> Register </h1>
+        <div className='registerContainer'>
+            <div className='registerInnerContainer'>
+                <h1 className='registerHeading'> Register </h1>
                 <input className={`inputField first ${usernameError && 'error'}`} type="text" placeholder="Username" value={username} onChange={onChangeU} />
                 {usernameError && <div className="errorMessage">{usernameError}</div>}
                 <input className={`inputField first ${emailError && 'error'}`} type="text" placeholder="Email" value={email} onChange={onChangeE} />

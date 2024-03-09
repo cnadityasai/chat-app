@@ -1,10 +1,17 @@
 import React, {useState} from 'react';
 import './chat.css';
 import bg from './bg.jpg'
+import MessageBox from '../../components/messageBox';
 
 function Chat() {
 
+    // Only for testing remove later
+    const message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
     const [selectedUser, setSelectedUser] = useState(null);
+    const [messageInput, setMessageInput] = useState("");
+
+    //testing
 
     function handleClick(user){
         if(selectedUser !== user){
@@ -12,6 +19,9 @@ function Chat() {
         }
     }
 
+    function handleMessageSubmit(){
+        console.log()
+    }
 
     return (
         <div className="page-container">
@@ -102,10 +112,25 @@ function Chat() {
                             <div className='user'>{selectedUser}</div>
                         </div>
                         <div className='chatSpace'>
+                            <div className='receiver'>
+                                {selectedUser === "User 1" && <MessageBox name={selectedUser} message={message}/>}    
+                            </div>
+                            <div className='sender'>
 
+                            </div>
                         </div>
                         <div className='textBox'>
-
+                            <input
+                                type="text"
+                                value={messageInput}
+                                onChange={(e) => setMessageInput(e.target.value)}
+                                placeholder="Type your message..."
+                            />
+                            <button onClick={handleMessageSubmit} className="submitButton">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
