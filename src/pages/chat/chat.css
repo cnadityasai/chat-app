@@ -119,15 +119,27 @@
     overflow-y: auto;
 }
 
-.box {
+.receiver, .sender {
+    height: auto;
+}
+
+.box, .sender > .box {
     padding: 20px;
-    width: 40%;
+    max-width: 100%;
+    height: auto;
+}
+
+.sender {
 }
 
 .messageBox{
     border: 3px solid black;
     padding: 15px;
     border-top-left-radius: 30px;
+    width: fit-content;
+    height: auto;
+    max-width: 50%;
+    word-wrap: break-word;
 }
 
 .textBox {
