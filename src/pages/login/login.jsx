@@ -9,6 +9,8 @@ function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [usernameError, setUsernameError] = useState("");
+    const [loginError, setLoginError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     function onChangeU(event) {
@@ -24,6 +26,7 @@ function Login() {
     function onSubmit() {
         if (username && password) {
             console.log("Submitted");
+            setIsLoading(true);
 
             const authHeader = 'Basic ' + btoa(username + ':' + password);
             
@@ -35,14 +38,19 @@ function Login() {
             .then(response => {
                 const data = response.data;
                 if(data.status === 'error'){
-                    console.error(data.message);
+                    setLoginError(data.message);
                 }
                 else if (data.status === 'ok'){
                     console.log('Token:', data.token);
+                    navigate('/chat');
                 }
             })
             .catch (error => {
+                setLoginError("An error occurred. Please try again later.");
                 console.error('Error:', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             })
         } else {
             console.log("Please fill out all fields correctly");
@@ -69,8 +77,9 @@ function Login() {
                 </label>
                 <div className='buttonContainer'>
                     <button onClick={navigateToRegistration}>Register</button>
-                    <button onClick={onSubmit}>Log In</button>
+                    <button onClick={onSubmit} disabled={isLoading}>{isLoading ? 'Logging in...' : 'Log In'} </button>
                 </div>
+                {loginError && <div className="errorMessage">{loginError}</div>}
             </div>
         </div>
     );
