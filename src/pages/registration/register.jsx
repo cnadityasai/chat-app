@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import './register.css';
+import bcrypt from 'bcryptjs';
 
 function Register() {
 
@@ -33,10 +35,19 @@ function Register() {
         setPasswordError(value.length < 8 ? "Password must be at least 8 characters long" : "");
     }
 
-    function onSubmit() {
+    async function onSubmit() {
         if (username && email && password) {
-            console.log("Submitted");
-            // You can add your submission logic here
+            try {
+                const response = await axios.post("url", {
+                    username: username,
+                    email: email,
+                    password: password
+                });
+                console.log(response.data);
+                navigate('/chat');
+            } catch (error) {
+                console.error("Error registering users", error);
+            }
         } else {
             console.log("Please fill out all fields correctly");
         }

@@ -124,7 +124,7 @@ function Chat() {
                                 {selectedUser === "User 1" && <MessageBox name={selectedUser} message={message}/>}    
                             </div>
                             <div className='sender'>
-                                {messages.filter((newMessage) => newMessage.user !== 'sender')
+                                {messages.filter((newMessage) => newMessage.user !== 'User 1')
                                 .map((newMessage, index) => (
                                     <MessageBox key={index} name={newMessage.user} message={newMessage.text} />
                                 ))
