@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
+import axios from 'axios'
 
 function Login() {
 
@@ -23,7 +24,26 @@ function Login() {
     function onSubmit() {
         if (username && password) {
             console.log("Submitted");
-            // add submission logic here
+
+            const authHeader = 'Basic ' + btoa(username + ':' + password);
+            
+            axios.post('url/auth/login', null, { // must add the url here
+                headers: {
+                    Authorization: authHeader
+                }
+            })
+            .then(response => {
+                const data = response.data;
+                if(data.status === 'error'){
+                    console.error(data.message);
+                }
+                else if (data.status === 'ok'){
+                    console.log('Token:', data.token);
+                }
+            })
+            .catch (error => {
+                console.error('Error:', error);
+            })
         } else {
             console.log("Please fill out all fields correctly");
         }

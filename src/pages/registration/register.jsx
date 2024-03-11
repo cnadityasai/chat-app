@@ -38,7 +38,7 @@ function Register() {
     async function onSubmit() {
         if (username && email && password) {
             try {
-                const response = await axios.post("url", {
+                const response = await axios.post('url/auth/register', {
                     username: username,
                     email: email,
                     password: password
