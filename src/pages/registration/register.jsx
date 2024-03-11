@@ -6,9 +6,9 @@ import bcrypt from 'bcryptjs';
 
 function Register() {
 
-    const [username, setUsername] = useState("");
+    const [name, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [pass, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -36,14 +36,18 @@ function Register() {
     }
 
     async function onSubmit() {
-        if (username && email && password) {
+        if (name && email && pass) {
             try {
-                const response = await axios.post('url/auth/register', {
-                    username: username,
-                    email: email,
-                    password: password
+                const response = await axios.post('http://127.0.0.1:5000/api/auth/register', {
+                    username: name,
+                    password: pass
                 });
-                console.log(response.data);
+                const data = response.data;
+                console.log(data)
+                if (data.status === 'ok') {
+                    console.log("Registration successful");
+                    // You can perform additional actions here if needed
+                }
                 navigate('/chat');
             } catch (error) {
                 console.error("Error registering users", error);
@@ -65,11 +69,11 @@ function Register() {
         <div className='registerContainer'>
             <div className='registerInnerContainer'>
                 <h1 className='registerHeading'> Register </h1>
-                <input className={`inputField first ${usernameError && 'error'}`} type="text" placeholder="Username" value={username} onChange={onChangeU} />
+                <input className={`inputField first ${usernameError && 'error'}`} type="text" placeholder="Username" value={name} onChange={onChangeU} />
                 {usernameError && <div className="errorMessage">{usernameError}</div>}
                 <input className={`inputField first ${emailError && 'error'}`} type="text" placeholder="Email" value={email} onChange={onChangeE} />
                 {emailError && <div className="errorMessage">{emailError}</div>}
-                <input className={`inputField ${passwordError && 'error'}`} type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={onChangeP} />
+                <input className={`inputField ${passwordError && 'error'}`} type={showPassword ? "text" : "password"} placeholder="Password" value={pass} onChange={onChangeP} />
                 {passwordError && <div className="errorMessage">{passwordError}</div>}
                 <label>
                     <input className="showPassword" type="checkbox" onChange={togglePasswordVisibility} /> Show Password

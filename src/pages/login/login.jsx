@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
-import axios from 'axios'
+import axios from 'axios';
 
 function Login() {
 
@@ -23,37 +23,40 @@ function Login() {
         setPassword(event.target.value);
     }
 
-    function onSubmit() {
+    async function onSubmit() {
         if (username && password) {
             console.log("Submitted");
             setIsLoading(true);
 
             const authHeader = 'Basic ' + btoa(username + ':' + password);
             
-            axios.post('url/auth/login', null, { // must add the url here
-                headers: {
-                    Authorization: authHeader
-                }
-            })
-            .then(response => {
+            try {
+                const response = await axios.post('http://127.0.0.1:5000/api/auth/login', null, {
+                    headers: {
+                        Authorization: authHeader
+                    }
+                });
                 const data = response.data;
+                console.log(data);
                 if(data.status === 'error'){
                     setLoginError(data.message);
                 }
-                else if (data.status === 'ok'){
-                    console.log('Token:', data.token);
+                else if (data.status === 'ok') {
+                    const token = data.token;
                     navigate('/chat');
                 }
-            })
-            .catch (error => {
-                setLoginError("An error occurred. Please try again later.");
+            } catch(error) {
+                if (error.response && error.response.status === 401) {
+                    setLoginError("Invalid username or password");
+                } else {
+                    setLoginError("An error occurred while logging in. Please try again.");
+                }
                 console.error('Error:', error);
-            })
-            .finally(() => {
+            } finally {
                 setIsLoading(false);
-            })
+            }
         } else {
-            console.log("Please fill out all fields correctly");
+            setLoginError("Please fill out all field correctly");
         }
     }
 
