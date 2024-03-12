@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 import axios from 'axios';
+import { ChatState } from '../../Context/ChatProvider';
 
 function Login() {
 
@@ -12,6 +13,8 @@ function Login() {
     const [loginError, setLoginError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+
+    const {user, setUser} = ChatState();
 
     function onChangeU(event) {
         const value = event.target.value;
@@ -43,7 +46,19 @@ function Login() {
                 }
                 else if (data.status === 'ok') {
                     const token = data.token;
-                    navigate('/chat');
+                    const profileResponse = await axios.get('http://127.0.0.1:5000/api/auth/profile', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    const profileData = profileResponse.data;
+                    if(profileData.status === 'ok' && profileData.user) {
+                        setUser(profileData.user);
+                       // console.log(user); to check the logged user
+                        navigate('/chat');
+                    } else {
+                        setLoginError("Invalid response from server");
+                    }
                 }
             } catch(error) {
                 if (error.response && error.response.status === 401) {
