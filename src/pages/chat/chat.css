@@ -55,6 +55,7 @@
     font-size: 1.5rem;
     padding-top: 10px;
     padding-left: 15px;
+    cursor: default;
 }
 
 .arrow {
@@ -168,6 +169,7 @@
 
 .create-room-text {
     padding-right: 9px;
+    cursor: pointer;
 }
 
 .create-room-form {
