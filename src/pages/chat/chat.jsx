@@ -13,10 +13,12 @@ function Chat() {
     const [messageInput, setMessageInput] = useState("");
     const {user} = ChatState();
     console.log(user);
-
+    const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
+    const [newRoomName, setNewRoomName] = useState('');
     //testing
     const [messages, setMessages] = useState([]);
-    const availableRooms = ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"];
+    const [availableRooms, setAvailableRooms] = useState(["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"]);
+    
 
     function handleClick(user){
         if(selectedUser !== user){
@@ -35,6 +37,26 @@ function Chat() {
         }
     }
 
+    function handleCreateRoom() {
+        setShowCreateRoomForm(true);
+    }
+
+    function handleCancelRoomCreation() {
+        setShowCreateRoomForm(false);
+    }
+
+    function handleRoomNameChange(event) {
+        setNewRoomName(event.target.value);
+    }
+
+    function handleSubmitRoom() {
+        if (newRoomName.trim() !== '') {
+            setAvailableRooms([...availableRooms, newRoomName]);
+            setNewRoomName('');
+            setShowCreateRoomForm(false);
+        }
+    }
+
     return (
         <div className="page-container">
             <div className="flex-container">
@@ -49,11 +71,26 @@ function Chat() {
                     <div className='second-grid'>
                         <div className='headSection'>
                             <header className='chatHead'>Messages</header>
-                            <div className="arrow">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-down-up" viewBox="0 0 16 16">
-                                <path fillRule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
-                                </svg>
+                            <div className="create-room">
+                                <div className="arrow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-down-up" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                                    </svg>
+                                </div>
+                                <div className="create-room-text" onClick={handleCreateRoom}>Create Room</div>
                             </div>
+                            {showCreateRoomForm && (
+                                <div className="create-room-form">
+                                    <input
+                                        type="text"
+                                        value={newRoomName}
+                                        onChange={handleRoomNameChange}
+                                        placeholder="Enter room name"
+                                    />
+                                    <button onClick={handleSubmitRoom}>Create</button>
+                                    <button onClick={handleCancelRoomCreation}>Cancel</button>
+                                </div>
+                            )}
                         </div>
                         <div className="messageList">
                             {availableRooms.map((room, index) => (

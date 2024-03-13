@@ -160,3 +160,17 @@
     margin: 0;
     min-width: 2%;
 }
+
+.create-room {
+    display: flex;
+    justify-content: space-between;
+}
+
+.create-room-text {
+    padding-right: 9px;
+}
+
+.create-room-form {
+    padding-top: 10px;
+    padding-left: 10px;
+}
