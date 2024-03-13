@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import './register.css';
-import bcrypt from 'bcryptjs';
 
 function Register() {
 
@@ -48,7 +47,7 @@ function Register() {
                     console.log("Registration successful");
                     // You can perform additional actions here if needed
                 }
-                navigate('/chat');
+                navigate('/');
             } catch (error) {
                 console.error("Error registering users", error);
             }

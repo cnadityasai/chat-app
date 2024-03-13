@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import './chat.css';
-import bg from './bg.jpg'
 import MessageBox from '../../components/messageBox';
+import ChatRoom from '../../components/ChatRoom';
+import { ChatState } from '../../Context/ChatProvider';
 
 function Chat() {
 
@@ -10,9 +11,12 @@ function Chat() {
 
     const [selectedUser, setSelectedUser] = useState(null);
     const [messageInput, setMessageInput] = useState("");
+    const {user} = ChatState();
+    console.log(user);
 
     //testing
     const [messages, setMessages] = useState([]);
+    const availableRooms = ["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"];
 
     function handleClick(user){
         if(selectedUser !== user){
@@ -52,62 +56,9 @@ function Chat() {
                             </div>
                         </div>
                         <div className="messageList">
-                            <div className="message" onClick={() => handleClick("User 1")}>
-                                <img src={bg} alt="User DP" />
-                                <p> User 1 </p>
-                            </div>
-                            <div className="message" onClick={() => handleClick("User 2")}>
-                                <img src={bg} alt="User DP" />
-                                <p> User 2 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 3 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 4 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 5 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 6 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 7 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 8 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 9 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 10 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 11 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 12 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 13 </p>
-                            </div>
-                            <div className="message">
-                                <img src={bg} alt="User DP" />
-                                <p> User 14 </p>
-                            </div>
+                            {availableRooms.map((room, index) => (
+                                <ChatRoom key={index} roomName={room} handleClick={handleClick} />
+                            ))}
                         </div>
                     </div>
                     <div className='third-grid'>
