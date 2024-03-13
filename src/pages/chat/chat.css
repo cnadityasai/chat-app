@@ -164,7 +164,7 @@
 
 .create-room {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .create-room-text {
@@ -172,7 +172,11 @@
     cursor: pointer;
 }
 
-.create-room-form {
+.create-room-form, .join-room-form {
     padding-top: 10px;
     padding-left: 10px;
+}
+
+.join-room-text {
+    cursor: pointer;
 }

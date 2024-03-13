@@ -52,7 +52,7 @@ function Register() {
                     setRegisterError(data.message || "Registration Failed");
                 }                
             } catch (error) {
-                if(error.response && error.response.status == 409) {
+                if(error.response && error.response.status === 409) {
                     setRegisterError("User already exists");
                 }
                 else {
