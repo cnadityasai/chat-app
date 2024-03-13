@@ -12,6 +12,7 @@ function Register() {
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [registerError, setRegisterError] = useState("");
     const navigate = useNavigate();
 
     function onChangeU(event) {
@@ -46,13 +47,22 @@ function Register() {
                 if (data.status === 'ok') {
                     console.log("Registration successful");
                     // You can perform additional actions here if needed
-                }
-                navigate('/');
+                    navigate('/');
+                } else {
+                    setRegisterError(data.message || "Registration Failed");
+                }                
             } catch (error) {
-                console.error("Error registering users", error);
+                if(error.response && error.response.status == 409) {
+                    setRegisterError("User already exists");
+                }
+                else {
+                    console.error("Error registering users", error);
+                    setRegisterError("An error occured while registering. Please try again.");
+                }  
             }
         } else {
             console.log("Please fill out all fields correctly");
+            setRegisterError("Please fill out all fields correctly");
         }
     }
 
@@ -81,6 +91,7 @@ function Register() {
                     <button className="first" onClick={onSubmit}>Create Account</button>
                     <button className="second" onClick={navigateToLogin}>Existing User</button>
                 </div>
+                {registerError && <div className="errorMessage">{registerError}</div>}
             </div>
         </div>
     );
