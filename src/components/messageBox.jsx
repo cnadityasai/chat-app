@@ -1,13 +1,19 @@
 import React from 'react';
 
 function MessageBox(props){
+
+    const {name, message, currentUser} = props;
+    const fromCurrentUser = name === currentUser;
+    const className = `box ${fromCurrentUser ? 'fromCurrentUser' : ''}`; 
+    const heading = `${fromCurrentUser? 'boxHeading' : ''}`;
+
     return (
-        <div className='box'>
-            <div className='boxHeading'>
-                <p>{props.name}</p>
+        <div className={className}>
+            <div className={heading}>
+                <p>{name}</p>
             </div>
             <div className='messageBox'>
-                <p>{props.message}</p>
+                <p>{message}</p>
             </div>
         </div>
     )

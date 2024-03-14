@@ -145,16 +145,14 @@ function Chat() {
                             <div className='user'>{selectedUser}</div>
                         </div>
                         <div className='chatSpace'>
-                            <div className='receiver'>
-                                {selectedUser === "User 1" && <MessageBox name={selectedUser} message={message}/>}    
-                            </div>
-                            <div className='sender'>
-                                {messages.filter((newMessage) => newMessage.user !== 'User 1')
-                                .map((newMessage, index) => (
-                                    <MessageBox key={index} name={newMessage.user} message={newMessage.text} />
-                                ))
-                                }
-                            </div>
+                        {messages.map((newMessage, index) => (
+                                <MessageBox
+                                    key={index}
+                                    name={newMessage.user}
+                                    message={newMessage.text}
+                                    currentUser='Room 1' // Add alignRight prop based on sender
+                                />
+                            ))}
                         </div>
                         <div className='textBox'>
                             <input

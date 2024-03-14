@@ -121,24 +121,31 @@
     overflow-y: auto;
 }
 
-.receiver, .sender {
-    height: auto;
-}
-
-.box, .sender > .box {
+.box {
+    display: flex;
+    flex-direction: column;
     padding: 20px;
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
 }
 
 .messageBox{
+    display: flex;
     border: 3px solid black;
     padding: 15px;
-    border-top-left-radius: 30px;
     width: fit-content;
     height: auto;
-    max-width: 50%;
+    max-width: 100%;
     word-wrap: break-word;
+}
+
+.fromCurrentUser {
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.boxHeading {
+    align-self: flex-end;
 }
 
 .textBox {
