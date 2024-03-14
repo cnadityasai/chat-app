@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import './chat.css';
 import MessageBox from '../../components/messageBox';
 import ChatRoom from '../../components/ChatRoom';
 import { ChatState } from '../../Context/ChatProvider';
 import axios from 'axios';
+import { useAuth } from '../../Context/AuthContext';
 
 function Chat() {
 
@@ -23,8 +25,13 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const [availableRooms, setAvailableRooms] = useState({rooms:[]});
     const [membersList, setMembersList] = useState([]);
+    const {isLoggedIn} = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        if(!isLoggedIn) {
+            navigate('/');
+        }
         fetchRooms();
     }, []);
 

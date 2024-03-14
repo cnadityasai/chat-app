@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 
-const ChatContext = createContext()
+const ChatContext = createContext();
 
 const ChatProvider = ({children}) => {
 

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './login.css';
 import axios from 'axios';
 import { ChatState } from '../../Context/ChatProvider';
+import { useAuth } from '../../Context/AuthContext';
 
 function Login() {
 
@@ -12,6 +13,7 @@ function Login() {
     const [usernameError, setUsernameError] = useState("");
     const [loginError, setLoginError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const {setIsLoggedIn} = useAuth();
     const navigate = useNavigate();
 
     const {user, setUser} = ChatState();
@@ -55,6 +57,7 @@ function Login() {
                     if(profileData.status === 'ok' && profileData.user) {
                         setUser(profileData.user);
                        // console.log(user); to check the logged user
+                        setIsLoggedIn(true);
                         navigate('/chat');
                     } else {
                         setLoginError("Invalid response from server");
