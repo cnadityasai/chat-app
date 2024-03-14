@@ -198,3 +198,15 @@
 .join-room-text {
     cursor: pointer;
 }
+
+.membersList {
+    align-self: center;
+    font-size: 0.8rem;
+    color: grey;
+    padding-left: 20px;
+    font-style: italic;
+}
+
+.membersList p {
+    margin: 0;
+}

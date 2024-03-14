@@ -9,7 +9,7 @@ function Chat() {
     // Only for testing remove later
     const message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 
-    const [selectedUser, setSelectedUser] = useState(null);
+    const [selectedRoom, setSelectedRoom] = useState(null);
     const [messageInput, setMessageInput] = useState("");
     const {user} = ChatState();
     // console.log(user);
@@ -19,28 +19,28 @@ function Chat() {
     const [joinRoomName, setJoinRoomName] = useState('');
     //testing
     const [messages, setMessages] = useState([]);
-    const [availableRooms, setAvailableRooms] = useState(["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"]);
+    const [availableRooms, setAvailableRooms] = useState({rooms:[]});
+    const [membersList, setMembersList] = useState([]);
 
     useEffect(() => {
         fetch("http://127.0.0.1:5000/api/chat/get_user_rooms")
         .then(response => response.json())
         .then(data => {
-            setAvailableRooms(data.rooms.map(room => room.room_name));
+            setAvailableRooms(data);
         })
         .catch(error => console.error('Error fetching rooms: ', error));
     }, []);
     
 
-    function handleClick(user){
-        if(selectedUser !== user){
-            setSelectedUser(user);
-        }
+    function handleClick(roomName, members){
+        setSelectedRoom(roomName);
+        setMembersList(members);
     }
 
     function handleMessageSubmit(){
         if(messageInput.trim() !== ''){
             const newMessage = {
-                user: selectedUser,
+                user: selectedRoom,
                 text: messageInput
             };
             setMessages([...messages, newMessage]);
@@ -145,8 +145,8 @@ function Chat() {
                             )}
                         </div>
                         <div className="messageList">
-                            {availableRooms.map((room, index) => (
-                                <ChatRoom key={index} roomName={room} handleClick={handleClick} />
+                            {availableRooms.rooms.map((room, index) => (
+                                <ChatRoom key={index} roomName={room.room_name} handleClick={() => handleClick(room.room_name, room.members)} />
                             ))}
                         </div>
                     </div>
@@ -157,7 +157,10 @@ function Chat() {
                                 <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
                                 </svg>
                             </div>
-                            <div className='user'>{selectedUser}</div>
+                            <div className='user'>{selectedRoom}</div>
+                            <div className='membersList'>
+                                <p>{selectedRoom? `Members: ${membersList.join(', ')}`:''}</p>
+                            </div>
                         </div>
                         <div className='chatSpace'>
                         {messages.map((newMessage, index) => (
