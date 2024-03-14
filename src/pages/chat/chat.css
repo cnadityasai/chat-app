@@ -180,8 +180,19 @@
 }
 
 .create-room-form, .join-room-form {
-    padding-top: 10px;
-    padding-left: 10px;
+    /* padding-top: 10px;
+    padding-left: 10px; */
+    padding: 20px;
+    padding-bottom: 0px;
+}
+
+.flex-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.create-room-input, .join-room-input {
+    min-width: 100%;
 }
 
 .join-room-text {

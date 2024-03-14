@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './chat.css';
 import MessageBox from '../../components/messageBox';
 import ChatRoom from '../../components/ChatRoom';
@@ -20,6 +20,15 @@ function Chat() {
     //testing
     const [messages, setMessages] = useState([]);
     const [availableRooms, setAvailableRooms] = useState(["Room 1", "Room 2", "Room 3", "Room 4", "Room 5"]);
+
+    useEffect(() => {
+        fetch("http://127.0.0.1:5000/api/chat/get_user_rooms")
+        .then(response => response.json())
+        .then(data => {
+            setAvailableRooms(data.rooms.map(room => room.room_name));
+        })
+        .catch(error => console.error('Error fetching rooms: ', error));
+    }, []);
     
 
     function handleClick(user){
@@ -107,25 +116,31 @@ function Chat() {
                             {showCreateRoomForm && (
                                 <div className="create-room-form">
                                     <input
+                                        className="create-room-input"
                                         type="text"
                                         value={newRoomName}
                                         onChange={handleRoomNameChange}
                                         placeholder="Enter room name"
                                     />
-                                    <button onClick={handleSubmitRoom}>Create</button>
-                                    <button onClick={handleCancelRoomCreation}>Cancel</button>
+                                    <div className="flex-buttons">
+                                        <button onClick={handleSubmitRoom}>Create</button>
+                                        <button onClick={handleCancelRoomCreation}>Cancel</button>
+                                    </div>
                                 </div>
                             )}
                             {showJoinRoomForm && (
                                 <div className="join-room-form">
                                     <input
+                                        className="join-room-input"
                                         type="text"
                                         value={joinRoomName}
                                         onChange={handleJoinRoomNameChange}
                                         placeholder="Enter room name to join"
                                     />
-                                    <button onClick={handleSubmitJoinRoom}>Join</button>
-                                    <button onClick={handleCancelRoomJoin}>Cancel</button>
+                                    <div className="flex-buttons">
+                                        <button onClick={handleSubmitJoinRoom}>Join</button>
+                                        <button onClick={handleCancelRoomJoin}>Cancel</button>
+                                    </div>
                                 </div>
                             )}
                         </div>
