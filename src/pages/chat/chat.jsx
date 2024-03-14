@@ -3,6 +3,7 @@ import './chat.css';
 import MessageBox from '../../components/messageBox';
 import ChatRoom from '../../components/ChatRoom';
 import { ChatState } from '../../Context/ChatProvider';
+import axios from 'axios';
 
 function Chat() {
 
@@ -17,19 +18,24 @@ function Chat() {
     const [showJoinRoomForm, setShowJoinRoomForm] = useState(false);
     const [newRoomName, setNewRoomName] = useState('');
     const [joinRoomName, setJoinRoomName] = useState('');
+    const [recipientId, setRecipientId] = useState('');
     //testing
     const [messages, setMessages] = useState([]);
     const [availableRooms, setAvailableRooms] = useState({rooms:[]});
     const [membersList, setMembersList] = useState([]);
 
     useEffect(() => {
+        fetchRooms();
+    }, []);
+
+    const fetchRooms = () => {
         fetch("http://127.0.0.1:5000/api/chat/get_user_rooms")
         .then(response => response.json())
         .then(data => {
             setAvailableRooms(data);
         })
         .catch(error => console.error('Error fetching rooms: ', error));
-    }, []);
+    }
     
 
     function handleClick(roomName, members){
@@ -60,9 +66,32 @@ function Chat() {
         setNewRoomName(event.target.value);
     }
 
+    function handleRecipientIdChange(event) {
+        setRecipientId(event.target.value);
+    }
+
     function handleSubmitRoom() {
         if (newRoomName.trim() !== '') {
-            setAvailableRooms([...availableRooms, newRoomName]);
+
+            const requestData = {
+                recipient_id: recipientId,
+                room_name: newRoomName,
+                user_id: user
+            };
+
+            console.log(requestData);
+
+            axios.post("http://127.0.0.1:5000/api/chat/new_chat", requestData)
+            .then(response => {
+                if(response.status === 200) {
+                    console.log('Room created Successfully:', response.data);
+                    fetchRooms();
+                } else {
+                    console.error("Failed to create room:", response.data);
+                }
+            })
+            .catch(error => console.error('Error fetching updated rooms: ', error));
+
             setNewRoomName('');
             setShowCreateRoomForm(false);
         }
@@ -121,6 +150,13 @@ function Chat() {
                                         value={newRoomName}
                                         onChange={handleRoomNameChange}
                                         placeholder="Enter room name"
+                                    />
+                                    <input
+                                        className="recipient-id-input"
+                                        type="text"
+                                        value={recipientId}
+                                        onChange={handleRecipientIdChange}
+                                        placeholder='Enter recipient ID'
                                     />
                                     <div className="flex-buttons">
                                         <button onClick={handleSubmitRoom}>Create</button>
