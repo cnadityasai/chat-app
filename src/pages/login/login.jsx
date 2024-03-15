@@ -42,7 +42,7 @@ function Login() {
                     }
                 });
                 const data = response.data;
-                console.log(data);
+                // console.log(data);
                 if(data.status === 'error'){
                     setLoginError(data.message);
                 }
