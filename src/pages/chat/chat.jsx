@@ -8,12 +8,17 @@ import axios from 'axios';
 import { useAuth } from '../../Context/AuthContext';
 import io from 'socket.io-client';
 
+const socket = io('http://127.0.0.1:5000', {
+        sync_disconnect_on_unload: true,
+    });
+
 function Chat() {
 
     // Only for testing remove later
     const message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 
     const [selectedRoom, setSelectedRoom] = useState(null);
+    const [selectedRoomId, setSelectedRoomId] = useState(null);
     const [messageInput, setMessageInput] = useState("");
     const {user} = ChatState();
     // console.log(user);
@@ -26,9 +31,6 @@ function Chat() {
     const [membersList, setMembersList] = useState([]);
     const {isLoggedIn, setIsLoggedIn, logout} = useAuth();
     const navigate = useNavigate();
-    const socket = io('http://127.0.0.1:5000', {
-        sync_disconnect_on_unload: true,
-    });
 
     useEffect(() => {
         if(!isLoggedIn) {
@@ -59,9 +61,23 @@ function Chat() {
     }
     
 
-    function handleClick(roomName, members){
+    function handleClick(roomId, roomName, members){
+
+        if(selectedRoomId) {
+            socket.emit('leave', {room: selectedRoomId})
+            socket.emit('chat', {data: 'User disconnected - Client'});
+        }
+
         setSelectedRoom(roomName);
+        setSelectedRoomId(roomId);
         setMembersList(members);
+        // console.log(roomName);    
+        // console.log(roomId);    
+        // console.log(members);
+        //console.log({room: roomId});
+
+        socket.emit('join', {room: roomId});
+        socket.emit('chat', {data: 'User Connected - Client'});
     }
 
     function handleMessageSubmit(){
@@ -177,7 +193,7 @@ function Chat() {
                         </div>
                         <div className="messageList">
                             {availableRooms.rooms.map((room, index) => (
-                                <ChatRoom key={index} roomName={room.room_name} handleClick={() => handleClick(room.room_name, room.members)} />
+                                <ChatRoom key={index} room={room}roomId={room.room_id} roomName={room.room_name} handleClick={() => handleClick(room.room_id, room.room_name, room.members)} />
                             ))}
                         </div>
                     </div>
