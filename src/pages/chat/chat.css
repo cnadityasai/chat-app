@@ -28,6 +28,7 @@
     -webkit-box-shadow: 6px 5px 45px -5px rgba(0,0,0,0.75);
     -moz-box-shadow: 6px 5px 45px -5px rgba(0,0,0,0.75);
     box-shadow: 6px 5px 45px -5px rgba(0,0,0,0.75);
+    justify-content: space-between;
 }
 
 .chatbox {
@@ -39,6 +40,27 @@
     background-color: rgb(135,206,235);
     border-radius: 6px;
     cursor: pointer;
+}
+
+.logout {
+    align-self: center;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 7px;
+    margin-bottom: 25px;
+    background-color: rgb(135,206,235);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.logout-text {
+    visibility: hidden;
+    font-size: 0.6rem;
+    width: auto;
+}
+
+.logout:hover .logout-text {
+    visibility: visible;
 }
 
 .second-grid {

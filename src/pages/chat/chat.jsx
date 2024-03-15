@@ -6,6 +6,7 @@ import ChatRoom from '../../components/ChatRoom';
 import { ChatState } from '../../Context/ChatProvider';
 import axios from 'axios';
 import { useAuth } from '../../Context/AuthContext';
+import io from 'socket.io-client';
 
 function Chat() {
 
@@ -17,22 +18,24 @@ function Chat() {
     const {user} = ChatState();
     // console.log(user);
     const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
-    const [showJoinRoomForm, setShowJoinRoomForm] = useState(false);
     const [newRoomName, setNewRoomName] = useState('');
-    const [joinRoomName, setJoinRoomName] = useState('');
     const [recipientId, setRecipientId] = useState('');
     //testing
     const [messages, setMessages] = useState([]);
     const [availableRooms, setAvailableRooms] = useState({rooms:[]});
     const [membersList, setMembersList] = useState([]);
-    const {isLoggedIn} = useAuth();
+    const {isLoggedIn, logout} = useAuth();
     const navigate = useNavigate();
+    //const socket = io('http://localhost:5000');
 
     useEffect(() => {
         if(!isLoggedIn) {
             navigate('/');
         }
         fetchRooms();
+        // socket.on('connect', () => {
+        //     console.log('Connected to the server');
+        // })
     }, []);
 
     const fetchRooms = () => {
@@ -104,27 +107,10 @@ function Chat() {
         }
     }
 
-    function handleJoinRoom() {
-        setShowJoinRoomForm(true);
+    function handleLogout() {
+        logout();
+        navigate('/');
     }
-
-    function handleCancelRoomJoin() {
-        setShowJoinRoomForm(false);
-    }
-
-    function handleJoinRoomNameChange(event) {
-        setJoinRoomName(event.target.value);
-    }
-
-    function handleSubmitJoinRoom() {
-        // Your logic to join the room goes here
-        if (joinRoomName.trim() !== '') {
-            console.log(`Joining room: ${joinRoomName}`);
-            setJoinRoomName('');
-            setShowJoinRoomForm(false);
-        }
-    }
-
 
     return (
         <div className="page-container">
@@ -135,6 +121,13 @@ function Chat() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-chat" viewBox="0 0 16 16">
                             <path d="M2.678 11.894a1 1 0 0 1 .287.801 11 11 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8 8 0 0 0 8 14c3.996 0 7-2.807 7-6s-3.004-6-7-6-7 2.808-7 6c0 1.468.617 2.83 1.678 3.894m-.493 3.905a22 22 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a10 10 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105"/>
                             </svg>
+                        </div>
+                        <div className="logout" onClick={handleLogout}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/>
+                            <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/>
+                            </svg>
+                            <span className="logout-text">Logout</span>
                         </div>
                     </div>
                     <div className='second-grid'>
