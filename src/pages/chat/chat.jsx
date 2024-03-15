@@ -147,7 +147,6 @@ function Chat() {
                                     </svg>
                                 </div> */}
                                 <div className="create-room-text" onClick={handleCreateRoom}>Create Room</div>
-                                <div className="join-room-text" onClick={handleJoinRoom}>Join Room</div>
                             </div>
                             {showCreateRoomForm && (
                                 <div className="create-room-form">
@@ -168,21 +167,6 @@ function Chat() {
                                     <div className="flex-buttons">
                                         <button onClick={handleSubmitRoom}>Create</button>
                                         <button onClick={handleCancelRoomCreation}>Cancel</button>
-                                    </div>
-                                </div>
-                            )}
-                            {showJoinRoomForm && (
-                                <div className="join-room-form">
-                                    <input
-                                        className="join-room-input"
-                                        type="text"
-                                        value={joinRoomName}
-                                        onChange={handleJoinRoomNameChange}
-                                        placeholder="Enter room name to join"
-                                    />
-                                    <div className="flex-buttons">
-                                        <button onClick={handleSubmitJoinRoom}>Join</button>
-                                        <button onClick={handleCancelRoomJoin}>Cancel</button>
                                     </div>
                                 </div>
                             )}

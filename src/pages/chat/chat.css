@@ -171,7 +171,7 @@
 
 .create-room {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-end;
 }
 
 .create-room-text {
@@ -191,8 +191,13 @@
     justify-content: space-evenly;
 }
 
-.create-room-input, .join-room-input {
+.create-room-input, .recipient-id-input{
     min-width: 100%;
+    padding: 1px;
+}
+
+.create-room-input {
+    margin-bottom: 5px;
 }
 
 .join-room-text {
