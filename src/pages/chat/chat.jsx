@@ -40,15 +40,19 @@ function Chat() {
         socket.on('connect', () => {
             console.log('Connected to the server');
         });
-        // socket.on('send_message', (msg) => {
-        //     if (typeof msg.current_user !== 'undefined') {
-        //         setMessages((prevMessages) => [...prevMessages, `${msg.current_user}: ${msg.message}`]);
-        //     }
-        // });
-        // return () => {
-        //     socket.emit('leave', { room: selectedRoom });
-        //     socket.close();
-        // };
+
+        // testing not done for this
+        socket.on('chat', (data) => {
+            setMessages((prevMessages) => [...prevMessages, data.message]);
+            console.log(data.message);
+        });
+        
+        return() => {
+            socket.on('connect', () => {
+                console.log('Connected to the server');
+            });
+            // socket.disconnect(); Finalise on which one
+        };
     }, []);
 
     const fetchRooms = () => {
@@ -83,9 +87,11 @@ function Chat() {
     function handleMessageSubmit(){
         if(messageInput.trim() !== ''){
             const newMessage = {
-                user: selectedRoom,
+                user: user,
+                room: selectedRoomId,
                 text: messageInput
             };
+            socket.emit('chat', newMessage);
             setMessages([...messages, newMessage]);
             setMessageInput('');
         }
@@ -135,6 +141,10 @@ function Chat() {
     }
 
     function handleLogout() {
+        socket.on('disconnect', () => {
+            console.log('Connected to the server');
+        });
+        // socket.disconnect(); finalise on which one
         logout();
         navigate('/');
     }
@@ -215,7 +225,7 @@ function Chat() {
                                     key={index}
                                     name={newMessage.user}
                                     message={newMessage.text}
-                                    currentUser='Room 1' // Add alignRight prop based on sender
+                                    currentUser={user} // Add alignRight prop based on sender
                                 />
                             ))}
                         </div>
