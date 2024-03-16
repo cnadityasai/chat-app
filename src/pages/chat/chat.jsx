@@ -43,8 +43,8 @@ function Chat() {
 
         // testing not done for this
         socket.on('chat', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data.message]);
-            console.log(data.message);
+            setMessages((prevMessages) => [...prevMessages, data]);
+            //console.log(data);
         });
         
         return() => {
@@ -67,8 +67,15 @@ function Chat() {
 
     function handleClick(roomId, roomName, members){
 
+        setMessages([])
+
+        if(selectedRoomId === roomId){
+            return;
+        }
+
         if(selectedRoomId) {
             socket.emit('leave', {room: selectedRoomId})
+            //console.log(selectedRoomId);
             socket.emit('chat', {data: 'User disconnected - Client'});
         }
 
@@ -85,16 +92,24 @@ function Chat() {
     }
 
     function handleMessageSubmit(){
-        if(messageInput.trim() !== ''){
+        const trimmedMessageInput = messageInput.trim();
+        if(trimmedMessageInput){
+
+            const sanitizedMessage = sanitizeInput(trimmedMessageInput)
+
             const newMessage = {
-                user: user,
+                current_user: user,
                 room: selectedRoomId,
-                text: messageInput
+                message: sanitizedMessage
             };
             socket.emit('chat', newMessage);
             setMessages([...messages, newMessage]);
             setMessageInput('');
         }
+    }
+
+    function sanitizeInput(input){
+        return input.replace(/[^a-zA-Z0-9\s]/g, '');
     }
 
     function handleCreateRoom() {
@@ -122,7 +137,7 @@ function Chat() {
                 user_id: user
             };
 
-            console.log(requestData);
+            //console.log(requestData);
 
             axios.post("http://127.0.0.1:5000/api/chat/new_chat", requestData)
             .then(response => {
@@ -223,8 +238,8 @@ function Chat() {
                         {messages.map((newMessage, index) => (
                                 <MessageBox
                                     key={index}
-                                    name={newMessage.user}
-                                    message={newMessage.text}
+                                    name={newMessage.current_user}
+                                    message={newMessage.message}
                                     currentUser={user} // Add alignRight prop based on sender
                                 />
                             ))}
