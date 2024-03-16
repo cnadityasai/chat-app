@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams } from 'react-router-dom';
 import './chat.css';
 import MessageBox from '../../components/messageBox';
 import ChatRoom from '../../components/ChatRoom';
@@ -7,6 +7,7 @@ import { ChatState } from '../../Context/ChatProvider';
 import axios from 'axios';
 import { useAuth } from '../../Context/AuthContext';
 import io from 'socket.io-client';
+import ChatSpace from '../../components/ChatSpace';
 
 const socket = io('http://127.0.0.1:5000', {
         sync_disconnect_on_unload: true,
@@ -15,8 +16,8 @@ const socket = io('http://127.0.0.1:5000', {
 function Chat() {
 
     // Only for testing remove later
+    const {roomId} = useParams();
     const message = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [selectedRoomId, setSelectedRoomId] = useState(null);
     const [messageInput, setMessageInput] = useState("");
@@ -39,18 +40,24 @@ function Chat() {
         fetchRooms();
         socket.on('connect', () => {
             console.log('Connected to the server');
+            socket.emit('join', {room: roomId});
         });
 
         // testing not done for this
         socket.on('chat', (data) => {
-            setMessages((prevMessages) => [...prevMessages, data]);
+            const messageWithRoom = {
+                room: selectedRoomId,
+                current_user: data.current_user,
+                message: data.message
+            }
+            setMessages((prevMessages) => [...prevMessages, messageWithRoom]);
             //console.log(data);
         });
         
         return() => {
-            socket.on('connect', () => {
-                console.log('Connected to the server');
-            });
+            socket.emit('leave', {room: roomId});
+            socket.off('connect');
+            socket.off('chat');
             // socket.disconnect(); Finalise on which one
         };
     }, []);
@@ -66,8 +73,6 @@ function Chat() {
     
 
     function handleClick(roomId, roomName, members){
-
-        setMessages([])
 
         if(selectedRoomId === roomId){
             return;
@@ -86,7 +91,7 @@ function Chat() {
         // console.log(roomId);    
         // console.log(members);
         //console.log({room: roomId});
-
+        navigate(`/chat/${roomId}`);
         socket.emit('join', {room: roomId});
         socket.emit('chat', {data: 'User Connected - Client'});
     }
@@ -234,16 +239,11 @@ function Chat() {
                                 <p>{selectedRoom? `Members: ${membersList.join(', ')}`:''}</p>
                             </div>
                         </div>
-                        <div className='chatSpace'>
-                        {messages.map((newMessage, index) => (
-                                <MessageBox
-                                    key={index}
-                                    name={newMessage.current_user}
-                                    message={newMessage.message}
-                                    currentUser={user} // Add alignRight prop based on sender
-                                />
-                            ))}
-                        </div>
+                        <ChatSpace
+                            messages={messages}
+                            user={user}
+                            roomId={roomId}
+                        />
                         <div className='textBox'>
                             <input
                                 type="text"
@@ -253,7 +253,7 @@ function Chat() {
                             />
                             <button onClick={handleMessageSubmit} className="submitButton">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
-                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
                                 </svg>
                             </button>
                         </div>

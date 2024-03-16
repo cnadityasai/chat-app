@@ -15,6 +15,7 @@ function App() {
           <Route index element={<Login />} />
           <Route path="/registration" element={<Register />} /> 
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:roomId" element={<Chat />}></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
