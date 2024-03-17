@@ -38,7 +38,7 @@ function Chat() {
     if (!isLoggedIn) {
       navigate("/")
     }
-    fetchRooms()
+    fetchRooms();
 
     const socket = io("http://127.0.0.1:5000", {
       sync_disconnect_on_unload: true,
@@ -67,6 +67,24 @@ function Chat() {
       socket.close()
     }
   }, [roomId, user, isLoggedIn, navigate, selectedRoomId])
+
+  useEffect(() => {
+    // Extract roomId from the URL
+    const roomIdFromUrl = window.location.pathname.split("/").pop();
+
+    // Check if the URL contains a roomId
+    if (roomIdFromUrl && roomIdFromUrl !== "chat") {
+        // Find the room details based on the roomId
+        const room = availableRooms.rooms.find(room => room.room_id === roomIdFromUrl);
+
+        // If the room is found, call handleClick with its details
+        if (room) {
+            handleClick(room.room_id, room.room_name, room.members);
+        } else {
+            // Handle case where the room is not found (optional)
+        }
+    }
+}, [availableRooms]);
 
   const fetchRooms = () => {
     fetch("http://127.0.0.1:5000/api/chat/get_user_rooms")
