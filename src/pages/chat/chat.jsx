@@ -9,9 +9,9 @@ import { useAuth } from "../../Context/AuthContext"
 import io from "socket.io-client"
 import ChatSpace from "../../components/ChatSpace"
 
-const socket = io("http://127.0.0.1:5000", {
-  sync_disconnect_on_unload: true,
-})
+// const socket = io("http://127.0.0.1:5000", {
+//   sync_disconnect_on_unload: true,
+// })
 
 function Chat() {
   // Only for testing remove later
@@ -65,7 +65,6 @@ function Chat() {
     return () => {
       socket.emit("leave", { room: roomId, current_user: user })
       socket.close()
-      // socket.disconnect(); Finalise on which one
     }
   }, [roomId, user, isLoggedIn, navigate, selectedRoomId])
 
@@ -83,11 +82,11 @@ function Chat() {
       return
     }
 
-    if (selectedRoomId) {
-      socket.emit("leave", { room: selectedRoomId, current_user: user })
-      //console.log(selectedRoomId);
-      socket.emit("chat", { data: "User disconnected - Client" })
-    }
+    // if (selectedRoomId) {
+    //   socket.emit("leave", { room: selectedRoomId, current_user: user })
+    //   //console.log(selectedRoomId);
+    //   socket.emit("chat", { data: "User disconnected - Client" })
+    // }
 
     setSelectedRoom(roomName)
     setSelectedRoomId(roomId)
@@ -97,7 +96,7 @@ function Chat() {
     // console.log(members);
     //console.log({room: roomId});
     navigate(`/chat/${roomId}`)
-    socket.emit("join", { room: roomId, current_user: user })
+    //socket.emit("join", { room: roomId, current_user: user })
     socket.emit("chat", { data: "User Connected - Client" })
   }
 
@@ -223,7 +222,7 @@ function Chat() {
                                     <path fillRule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
                                     </svg>
                                 </div> */}
-                <div className="username">{user}</div>
+                <div className="username">Current User: {user}</div>
                 <div className='create-room-text' onClick={handleCreateRoom}>
                   Create Room
                 </div>
