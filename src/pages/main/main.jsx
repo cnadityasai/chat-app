@@ -37,26 +37,8 @@ function Main() {
       })
       setSocket(socket)
   
-    //   socket.on("connect", () => {
-    //     console.log("Connected to the server")
-    //     socket.emit("chat", { data: "User Connected - Client." })
-    //    //socket.emit("join", { room: roomId, current_user: user })
-    //   })
-  
-      // testing not done for this
-    //   socket.on("chat", (data) => {
-    //     const messageWithRoom = {
-    //       room: selectedRoomId,
-    //       current_user: data.current_user,
-    //       message: data.message,
-    //     }
-    //     setMessages((prevMessages) => [...prevMessages, messageWithRoom])
-    //     console.log(`Received chat event: ${data}`)
-    //   })
-  
       return () => {
-        // socket.emit("leave", { room: roomId, current_user: user });
-        // socket.close();
+
       }
     }, [roomId, user, isLoggedIn, navigate, selectedRoomId])
   
@@ -73,18 +55,6 @@ function Main() {
         if (selectedRoomId === roomId) {
           return;
         }
-    
-        // if (selectedRoomId) {
-        //   socket.emit("leave", { room: selectedRoomId, current_user: user })
-        //   //console.log(selectedRoomId);
-        //   socket.emit("chat", { data: "User disconnected - Client" })
-        // }
-    
-        // setSelectedRoom(roomName)
-        // setSelectedRoomId(roomId)
-        // setMembersList(members)
-        //socket.emit("join", { room: roomId, current_user: user })
-        //socket.emit("chat", { data: "User Connected - Client" })
         navigate(`/chat/${roomId}`)
       }
       function handleSubmitRoom() {

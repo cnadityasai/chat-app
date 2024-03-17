@@ -69,19 +69,15 @@ function Chat() {
   }, [roomId, user, isLoggedIn, navigate, selectedRoomId])
 
   useEffect(() => {
-    // Extract roomId from the URL
     const roomIdFromUrl = window.location.pathname.split("/").pop();
 
-    // Check if the URL contains a roomId
     if (roomIdFromUrl && roomIdFromUrl !== "chat") {
-        // Find the room details based on the roomId
         const room = availableRooms.rooms.find(room => room.room_id === roomIdFromUrl);
 
-        // If the room is found, call handleClick with its details
         if (room) {
             handleClick(room.room_id, room.room_name, room.members);
         } else {
-            // Handle case where the room is not found (optional)
+            console.error('Room not found');
         }
     }
 }, [availableRooms]);
@@ -100,21 +96,11 @@ function Chat() {
       return
     }
 
-    // if (selectedRoomId) {
-    //   socket.emit("leave", { room: selectedRoomId, current_user: user })
-    //   //console.log(selectedRoomId);
-    //   socket.emit("chat", { data: "User disconnected - Client" })
-    // }
-
     setSelectedRoom(roomName)
     setSelectedRoomId(roomId)
     setMembersList(members)
-    // console.log(roomName);
-    // console.log(roomId);
-    // console.log(members);
-    //console.log({room: roomId});
+
     navigate(`/chat/${roomId}`)
-    //socket.emit("join", { room: roomId, current_user: user })
     socket.emit("chat", { data: "User Connected - Client" })
   }
 
