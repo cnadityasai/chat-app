@@ -43,9 +43,17 @@ function Main() {
     }, [roomId, user, isLoggedIn, navigate, selectedRoomId])
   
     const fetchRooms = () => {
-      fetch("http://127.0.0.1:5000/api/chat/get_user_rooms")
+      // console.log(token)
+      const headers = {
+        'Authorization': `Bearer ${token}`
+      }
+      fetch("http://127.0.0.1:5000/api/chat/list_rooms", { 
+        method: "GET",
+        headers: headers
+      })
         .then((response) => response.json())
         .then((data) => {
+          // console.log(data)
           setAvailableRooms(data)
         })
         .catch((error) => console.error("Error fetching rooms: ", error))
@@ -60,17 +68,18 @@ function Main() {
       function handleSubmitRoom() {
         if (newRoomName.trim() !== "") {
           const requestData = {
-            recipient_id: recipientId,
-            room_name: newRoomName,
-            user_id: user,
+            room_name: newRoomName
           }
     
           //console.log(requestData);
-    
           axios
-            .post("http://127.0.0.1:5000/api/chat/new_chat", requestData)
+            .post("http://127.0.0.1:5000/api/chat/room/new", requestData, {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          })
             .then((response) => {
-              if (response.status === 200) {
+              if (response.status === 201) {
                 console.log("Room created Successfully:", response.data)
                 fetchRooms()
               } else {
@@ -173,13 +182,13 @@ function Main() {
                         onChange={handleRoomNameChange}
                         placeholder='Enter room name'
                       />
-                      <input
+                      {/* <input
                         className='recipient-id-input'
                         type='text'
                         value={recipientId}
                         onChange={handleRecipientIdChange}
                         placeholder='Enter recipient ID'
-                      />
+                      /> */}
                       <div className='flex-buttons'>
                         <button onClick={handleSubmitRoom}>Create</button>
                         <button onClick={handleCancelRoomCreation}>Cancel</button>

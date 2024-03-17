@@ -33,12 +33,13 @@ function Chat() {
   const [membersList, setMembersList] = useState([])
   const { isLoggedIn, setIsLoggedIn, logout } = useAuth()
   const navigate = useNavigate()
+  const { token } = useAuth()
 
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/")
     }
-    fetchRooms();
+    fetchRooms()
 
     const socket = io("http://127.0.0.1:5000", {
       sync_disconnect_on_unload: true,
@@ -69,23 +70,33 @@ function Chat() {
   }, [roomId, user, isLoggedIn, navigate, selectedRoomId])
 
   useEffect(() => {
-    const roomIdFromUrl = window.location.pathname.split("/").pop();
+    const roomIdFromUrl = window.location.pathname.split("/").pop()
 
     if (roomIdFromUrl && roomIdFromUrl !== "chat") {
-        const room = availableRooms.rooms.find(room => room.room_id === roomIdFromUrl);
+      const room = availableRooms.rooms.find(
+        (room) => room.room_id === roomIdFromUrl
+      )
 
-        if (room) {
-            handleClick(room.room_id, room.room_name, room.members);
-        } else {
-            console.error('Room not found');
-        }
+      if (room) {
+        handleClick(room.room_id, room.room_name, room.members)
+      } else {
+        console.error("Room not found")
+      }
     }
-}, [availableRooms]);
+  }, [availableRooms])
 
   const fetchRooms = () => {
-    fetch("http://127.0.0.1:5000/api/chat/get_user_rooms")
+    // console.log(token)
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    }
+    fetch("http://127.0.0.1:5000/api/chat/list_rooms", {
+      method: "GET",
+      headers: headers,
+    })
       .then((response) => response.json())
       .then((data) => {
+        // console.log(data)
         setAvailableRooms(data)
       })
       .catch((error) => console.error("Error fetching rooms: ", error))
@@ -151,9 +162,13 @@ function Chat() {
       //console.log(requestData);
 
       axios
-        .post("http://127.0.0.1:5000/api/chat/new_chat", requestData)
+        .post("http://127.0.0.1:5000/api/chat/room/new", requestData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((response) => {
-          if (response.status === 200) {
+          if (response.status === 201) {
             console.log("Room created Successfully:", response.data)
             fetchRooms()
           } else {
@@ -219,14 +234,14 @@ function Chat() {
           <div className='second-grid'>
             <div className='headSection'>
               <header className='chatHead'>Messages</header>
-              
+
               <div className='create-room'>
                 {/* <div className="arrow">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-down-up" viewBox="0 0 16 16">
                                     <path fillRule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
                                     </svg>
                                 </div> */}
-                <div className="username">Current User: {user}</div>
+                <div className='username'>Current User: {user}</div>
                 <div className='create-room-text' onClick={handleCreateRoom}>
                   Create Room
                 </div>
@@ -240,13 +255,13 @@ function Chat() {
                     onChange={handleRoomNameChange}
                     placeholder='Enter room name'
                   />
-                  <input
+                  {/* <input
                     className='recipient-id-input'
                     type='text'
                     value={recipientId}
                     onChange={handleRecipientIdChange}
                     placeholder='Enter recipient ID'
-                  />
+                  /> */}
                   <div className='flex-buttons'>
                     <button onClick={handleSubmitRoom}>Create</button>
                     <button onClick={handleCancelRoomCreation}>Cancel</button>

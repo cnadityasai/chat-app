@@ -55,8 +55,9 @@ function Login() {
                         }
                     });
                     const profileData = profileResponse.data;
-                    if(profileData.status === 'ok' && profileData.user) {
-                        setUser(profileData.user);
+                
+                    if(profileData.status === 'ok' && profileData.user_id) {
+                        setUser(profileData.username);
                        // console.log(user); to check the logged user
                         setIsLoggedIn(true);
                         navigate('/chat');
