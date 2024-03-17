@@ -13,7 +13,7 @@ function Login() {
     const [usernameError, setUsernameError] = useState("");
     const [loginError, setLoginError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const {setIsLoggedIn} = useAuth();
+    const {setIsLoggedIn, setAuthToken} = useAuth();
     const navigate = useNavigate();
 
     const {user, setUser} = ChatState();
@@ -48,6 +48,7 @@ function Login() {
                 }
                 else if (data.status === 'ok') {
                     const token = data.token;
+                    setAuthToken(token);
                     const profileResponse = await axios.get('http://127.0.0.1:5000/api/auth/profile', {
                         headers: {
                             Authorization: `Bearer ${token}`

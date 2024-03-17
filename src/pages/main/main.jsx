@@ -25,13 +25,13 @@ function Main() {
     const [membersList, setMembersList] = useState([])
     const { isLoggedIn, setIsLoggedIn, logout } = useAuth()
     const navigate = useNavigate()
+    const {token} = useAuth();
   
     useEffect(() => {
       if (!isLoggedIn) {
         navigate("/")
       }
       fetchRooms()
-  
       const socket = io("http://127.0.0.1:5000", {
         sync_disconnect_on_unload: true,
       })
